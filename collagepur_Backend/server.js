@@ -2,6 +2,7 @@ const express=require("express");
 const mongoose=require("mongoose");
 const cors=require("cors");
 const donorRoutes = require("./routes/DonorRoutes");
+const volunteerRoutes=require("./routes/VolunteerRoutes");
 
 
 const app=express();
@@ -13,7 +14,11 @@ mongoose.connect("mongodb://localhost:27017/collagepur")
 .then(()=>console.log("connected"))
 .catch((err)=>console.log(err))
 
+
 app.use("/donor", donorRoutes);
+
+app.use("/volunteer",volunteerRoutes);
+
 
 
 app.listen(8880,()=>
