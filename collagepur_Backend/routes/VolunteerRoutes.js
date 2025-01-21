@@ -23,12 +23,15 @@ router.get("/:id", (req, res) => {
 
 
 router.post("/", (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, email,phone_no, message,availability, activities} = req.body;
 
   const volunteer = new Volunteer({
     name,
     email,
+    phone_no,
     message,
+    availability,
+    activities,
   });
 
   volunteer
