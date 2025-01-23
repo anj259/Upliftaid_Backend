@@ -26,7 +26,6 @@ router.get("/:id", (req, res) => {
 
 
 
-// Configure Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/"); 
@@ -36,9 +35,44 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const allowedExtensions = /pdf|doc|docx/; 
+    const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedExtensions.test(file.mimetype);
 
-router.post("/", upload.single("resume"), (req, res) => {
+    if (extname && mimetype) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only .pdf, .doc, and .docx files are allowed"));
+    }
+  },
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+});
+
+
+router.post("/", (req, res, next) => {
+  upload.single("resume")(req, res, (err) => {
+    if (err) {
+      if (err instanceof multer.MulterError && err.code === "LIMIT_FILE_SIZE") {
+        return res.status(400).json({
+          message: "File size exceeds the 5MB limit",
+        });
+      } else if (err.message.includes("Only .pdf, .doc, and .docx files are allowed")) {
+        return res.status(400).json({
+          message: "Invalid file type. Only .pdf, .doc, and .docx files are allowed",
+        });
+      } else {
+        return res.status(500).json({
+          message: "An error occurred during file upload",
+          error: err.message,
+        });
+      }
+    }
+    next();
+  });
+}, async (req, res) => {
   const { name, email, jobposition, coverletter } = req.body;
 
   if (!req.file) {
@@ -49,7 +83,7 @@ router.post("/", upload.single("resume"), (req, res) => {
     name,
     email,
     jobposition,
-    resume: req.file.filename, // Store the filename in the database
+    resume: req.file.filename, 
     coverletter,
   });
 
@@ -58,35 +92,24 @@ router.post("/", upload.single("resume"), (req, res) => {
     .then((savedApplication) =>
       res.status(200).json({
         message: "Application submitted successfully",
-        name: savedApplication.name, 
+        name: savedApplication.name,
         applicationform: savedApplication,
       })
     )
-    .catch((err) =>
-      res
-        .status(500)
-        .json({ message: "Error saving application form", error: err.message })
-    );
+    .catch((err) => {
+      if (err.code === 11000) { 
+        return res.status(400).json({
+          message: "Email already exists",
+          error: err.message,
+        });
+      } else {
+        return res.status(500).json({
+          message: "Error saving application form",
+          error: err.message,
+        });
+      }
+    });
 });
 
-
-
-
-// router.post("/", (req, res) => {
-//   const { name, email, jobposition,resume,coverletter  } = req.body;
-
-//   const applicationform = new Applicationform({
-//     name,
-//     email,
-//     jobposition,
-//     resume,
-//     coverletter,
-//   });
-
-//   applicationform
-//     .save()
-//     .then((savedapplicationform) => res.status(200).json({ message: "Application submitted successful", applicationform: savedapplicationform }))
-//     .catch((err) => res.status(500).json({ message: "Error saving applicationform", error: err.message }));
-// });
-
 module.exports = router;
+

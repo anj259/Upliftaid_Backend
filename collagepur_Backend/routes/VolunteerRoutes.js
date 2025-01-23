@@ -37,7 +37,40 @@ router.post("/", (req, res) => {
   volunteer
     .save()
     .then((saveVolunteer) => res.status(200).json({ message: "successful", volunteer: saveVolunteer }))
-    .catch((err) => res.status(500).json({ message: "Error saving volunteer", error: err.message }));
+    .catch((err) => {
+      if (err.code === 11000) {
+        return res.status(400).json({ message: "Email already exists", error: err.message });
+      } else {
+        return res.status(500).json({ message: "Error saving volunteer", error: err.message });
+      }
+    });
+
+    
+    // .catch((err) => res.status(500).json({ message: "Error saving volunteer", error: err.message }));
+    // .catch((err) => {
+    //   if (err.code === 11000) 
+    //   {
+    //     res.status(400).json({ message: "Email already exists", error: err.message });
+    //   } 
+    //   // else if (err.name === "ValidationError") 
+    //   // {
+    //   //   res.status(400).json({ message: "Validation Error", error: err.message });
+    //   // } 
+    //   else 
+    //   {
+    //     res.status(500).json({ message: "Error saving volunteer", error: err.message });
+    //   }
+    // });
+   
+   
+    // .catch((err) => {
+    //   console.error("Error:", err); // Log the full error
+    //   if (err.code === 11000) {
+    //     res.status(400).json({ message: "Email already exists", error: err.message });
+    //   } else {
+    //     res.status(500).json({ message: "Error saving volunteer", error: err.message });
+    //   }
+    // });
 });
 
 module.exports = router;

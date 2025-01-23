@@ -22,8 +22,10 @@ router.get("/:id", (req, res) => {
 });
 
 
+
+
 router.post("/", (req, res) => {
-  const { name, email,subject, message } = req.body;
+  const { name, email, subject, message } = req.body;
 
   const contact = new Contact({
     name,
@@ -34,8 +36,21 @@ router.post("/", (req, res) => {
 
   contact
     .save()
-    .then((saveContact) => res.status(200).json({ message: "successful",name:contact.name, Contact: saveContact }))
-    .catch((err) => res.status(500).json({ message: "Error saving Contact", error: err.message }));
+    .then((savedContact) => res.status(200).json({ message: "successful", Contact: savedContact }))
+    .catch((err) => {
+      if (err.code === 11000) 
+      {
+        res.status(400).json({ message: "Email already exists", error: err.message });
+      } 
+      // else if (err.name === "ValidationError") 
+      // {
+      //   res.status(400).json({ message: "Validation Error", error: err.message });
+      // } 
+      else 
+      {
+        res.status(500).json({ message: "Error saving contact", error: err.message });
+      }
+    });
 });
 
 module.exports = router;
