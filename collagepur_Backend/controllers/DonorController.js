@@ -1,4 +1,4 @@
-const Donor = require("../models/Doner");
+const Donor = require("../models/Donor");
 
 const getAllDonors = async (req, res) => {
   try {
