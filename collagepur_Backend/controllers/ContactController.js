@@ -21,19 +21,7 @@ const getContactById = async (req, res) => {
   }
 };
 
-// const {name,email,subject,message}=req.body;
-// if(!name || !email || !subject || !message)
-// {
-//     res.status(400);
-//     throw new Error("All fields are mandatory");
-// }
 
-// const userAvailable=await Contact.findOne({email});
-// if(userAvailable)
-// {
-//     res.status(400);
-//     throw new Error("A Email already exist");
-// }
 
 const createContact = async (req, res) => {
   const { name, email, subject, message } = req.body;
