@@ -1,6 +1,6 @@
 const multer = require("multer");
 const path = require("path");
-const Applicationform = require("../models/Application_form");
+const Applicationform = require("../models/Applicationform");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

@@ -1,12 +1,12 @@
 const express = require("express");
-const {getAllDonors,getDonorById,createDonor,} = require("../controllers/DonorController");
+const {getAllDonors,getDonorById,createDonor,} = require("../controllers/donorController");
 
 const router = express.Router();
 
-router.get("/", getAllDonors);
+router.get("/getallDonors", getAllDonors);
 
-router.get("/:id", getDonorById);
+router.get("/getDonor/:id", getDonorById);
 
-router.post("/", createDonor);
+router.post("/createDonor", createDonor);
 
 module.exports = router;

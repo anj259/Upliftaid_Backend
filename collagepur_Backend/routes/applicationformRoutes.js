@@ -1,14 +1,14 @@
 const multer = require("multer");
 const express = require("express");
-const {uploadMiddleware,getAllApplications,getApplicationById,createApplication,} = require("../controllers/ApplicationFormController");
+const {uploadMiddleware,getAllApplications,getApplicationById,createApplication,} = require("../controllers/applicationformController");
 
 const router = express.Router();
 
-router.get("/", getAllApplications);
+router.get("/getallApplications", getAllApplications);
 
-router.get("/:id", getApplicationById);
+router.get("/getApllication/:id", getApplicationById);
 
-router.post("/", (req, res, next) => {
+router.post("/createApplication", (req, res, next) => {
   uploadMiddleware(req, res, (err) => {
     if (err) {
       if (err instanceof multer.MulterError && err.code === "LIMIT_FILE_SIZE") {

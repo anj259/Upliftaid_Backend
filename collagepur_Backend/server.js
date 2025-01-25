@@ -4,12 +4,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const connectdb=require("./database/dbconnection");
+const connectdb=require("./database/dbConnection");
 
-const donorRoutes = require("./routes/DonorRoutes");
-const volunteerRoutes = require("./routes/VolunteerRoutes");
-const applicationFormRoutes = require("./routes/Application_formRoutes");
-const contactRoutes = require("./routes/Contactroutes");
+const donorRoutes = require("./routes/donorRoutes");
+const volunteerRoutes = require("./routes/volunteerRoutes");
+const applicationFormRoutes = require("./routes/applicationformRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));

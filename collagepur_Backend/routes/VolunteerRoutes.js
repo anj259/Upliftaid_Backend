@@ -1,13 +1,13 @@
 
 const express = require("express");
-const {getAllVolunteers,getVolunteerById,createVolunteer,} = require("../controllers/VolunteerController");
+const {getAllVolunteers,getVolunteerById,createVolunteer,} = require("../controllers/volunteerController");
 
 const router = express.Router();
 
-router.get("/", getAllVolunteers);
+router.get("/getallVolunteers", getAllVolunteers);
 
-router.get("/:id", getVolunteerById);
+router.get("/getVolunteer/:id", getVolunteerById);
 
-router.post("/", createVolunteer);
+router.post("/createVolunteer", createVolunteer);
 
 module.exports = router;

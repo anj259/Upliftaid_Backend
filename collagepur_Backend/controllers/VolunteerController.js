@@ -22,6 +22,8 @@ const getVolunteerById = async (req, res) => {
   }
 };
 
+
+
 const createVolunteer = async (req, res) => {
 //   const { name, email, phone_no, message, availability, activities } = req.body;
 const { name, email, message } = req.body;
