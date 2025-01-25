@@ -32,8 +32,12 @@ const uploadMiddleware = upload.single("resume");
 const getAllApplications = async (req, res) => {
   try {
     const applications = await Applicationform.find({});
+    if (!applications || applications.length===0) {
+      return res.status(404).json({ message: "Applications are not found" });
+    }
     res.status(200).json(applications);
-  } catch (error) {
+  } 
+  catch (error) {
     res.status(500).json({ message: "Error fetching applications", error: error.message });
   }
 };
@@ -45,7 +49,8 @@ const getApplicationById = async (req, res) => {
       return res.status(404).json({ message: "Application not found" });
     }
     res.status(200).json(application);
-  } catch (error) {
+  }
+  catch (error) {
     res.status(500).json({ message: "Error fetching application", error: error.message });
   }
 };
@@ -55,6 +60,10 @@ const createApplication = async (req, res) => {
 
   if (!req.file) {
     return res.status(400).json({ message: "Resume file is required" });
+  }
+
+  else if (!name || !email || !jobposition ) {
+    return res.status(400).json({ message: "All fields are mandatory" });
   }
 
   try {
@@ -72,12 +81,9 @@ const createApplication = async (req, res) => {
       name: savedApplication.name,
       applicationform: savedApplication,
     });
-  } catch (error) {
-    if (error.code === 11000) {
-      res.status(400).json({ message: "Email already exists", error: error.message });
-    } else {
-      res.status(500).json({ message: "Error saving application form", error: error.message });
-    }
+  } 
+  catch (error) {
+    res.status(500).json({ message: "Error saving application form", error: error.message });
   }
 };
 

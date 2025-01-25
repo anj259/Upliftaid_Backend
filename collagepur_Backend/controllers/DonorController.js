@@ -3,8 +3,12 @@ const Donor = require("../models/Donor");
 const getAllDonors = async (req, res) => {
   try {
     const donors = await Donor.find({});
+    if (!donors ||donors.length === 0) {
+      return res.status(404).json({ message: "Donors are not found" });
+    }
     res.status(200).json(donors);
-  } catch (error) {
+  } 
+  catch (error) {
     res.status(500).json({ message: "Error fetching donors", error: error.message });
   }
 };
@@ -16,7 +20,8 @@ const getDonorById = async (req, res) => {
       return res.status(404).json({ message: "Donor not found" });
     }
     res.status(200).json(donor);
-  } catch (error) {
+  } 
+  catch (error) {
     res.status(500).json({ message: "Error fetching donor", error: error.message });
   }
 };
@@ -24,11 +29,16 @@ const getDonorById = async (req, res) => {
 const createDonor = async (req, res) => {
   const { name, email, amount, message, paymentMethod, details } = req.body;
 
+  if (!name || !email || !amount || !message || !paymentMethod || !details) {
+    return res.status(400).json({ message: "All fields are mandatory" });
+  }
+
   try {
     const donor = new Donor({ name, email, amount, message, paymentMethod, details });
     const savedDonor = await donor.save();
     res.status(200).json({ message: "Payment successful", donor: savedDonor });
-  } catch (error) {
+  } 
+  catch (error) {
     res.status(500).json({ message: "Error saving donor", error: error.message });
   }
 };
