@@ -27,7 +27,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
-const uploadMiddleware = upload.single("resume");
+const uploadfileMiddleware = upload.single("resume");
 
 const getAllApplications = async (req, res) => {
   try {
@@ -55,21 +55,23 @@ const getApplicationById = async (req, res) => {
   }
 };
 
+
 const createApplication = async (req, res) => {
   const { name, email, jobposition, coverletter } = req.body;
 
-  if (!req.file) {
+  if (!req.file) 
+    {
     return res.status(400).json({ message: "Resume file is required" });
-  }
-
-  else if (!name || !email || !jobposition ) {
+  } 
+  else if (!name || !email || !jobposition) 
+    {
     return res.status(400).json({ message: "All fields are mandatory" });
   }
 
   try {
     const application = new Applicationform({
       name,
-      email,
+      email,  
       jobposition,
       resume: req.file.filename,
       coverletter,
@@ -81,14 +83,14 @@ const createApplication = async (req, res) => {
       name: savedApplication.name,
       applicationform: savedApplication,
     });
-  } 
-  catch (error) {
+  } catch (error) {
     res.status(500).json({ message: "Error saving application form", error: error.message });
   }
 };
 
+
 module.exports = {
-  uploadMiddleware,
+  uploadfileMiddleware,
   getAllApplications,
   getApplicationById,
   createApplication,
