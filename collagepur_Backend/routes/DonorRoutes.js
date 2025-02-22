@@ -9,4 +9,6 @@ router.get("/getDonor/:id", getDonorById);
 
 router.post("/createDonor", createDonor);
 
+// router.post("/createDonor", uploadImageMiddleware, createDonor);
+
 module.exports = router;

@@ -27,14 +27,14 @@ const getDonorById = async (req, res) => {
 };
 
 const createDonor = async (req, res) => {
-  const { name, email, amount, message, paymentMethod, details } = req.body;
+  const { name, email, amount, message, paymentMethod, details,fund  } = req.body;
 
-  if (!name || !email || !amount || !message || !paymentMethod || !details) {
+  if (!name || !email || !amount || !message || !paymentMethod || !details || !fund) {
     return res.status(400).json({ message: "All fields are mandatory" });
   }
 
   try {
-    const donor = new Donor({ name, email, amount, message, paymentMethod, details });
+    const donor = new Donor({ name, email, amount, message, paymentMethod, details,fund  });
     const savedDonor = await donor.save();
     res.status(200).json({ message: "Payment successful", donor: savedDonor });
   } 
@@ -42,6 +42,40 @@ const createDonor = async (req, res) => {
     res.status(500).json({ message: "Error saving donor", error: error.message });
   }
 };
+
+
+// const createDonor = async (req, res) => {
+//   const { name, email, amount, message, paymentMethod, details } = req.body;
+
+//   if (!name || !email || !amount || !message || !paymentMethod || !details) {
+//     return res.status(400).json({ message: "All fields are mandatory" });
+//   }
+
+//   // Check if an image was uploaded
+//   const image = req.file ? req.file.filename : null;
+
+//   if (!image) {
+//     return res.status(400).json({ message: "Image upload is required" });
+//   }
+
+//   try {
+//     const donor = new Donor({
+//       name,
+//       email,
+//       amount,
+//       message,
+//       paymentMethod,
+//       details,
+//       image, // Store image filename
+//     });
+
+//     const savedDonor = await donor.save();
+//     res.status(200).json({ message: "Payment successful", donor: savedDonor });
+//   } catch (error) {
+//     res.status(500).json({ message: "Error saving donor", error: error.message });
+//   }
+// };
+
 
 module.exports = {
   getAllDonors,

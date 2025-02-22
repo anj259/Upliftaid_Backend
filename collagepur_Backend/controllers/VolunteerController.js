@@ -30,16 +30,16 @@ const getVolunteerById = async (req, res) => {
 
 
 const createVolunteer = async (req, res) => {
-//   const { name, email, phone_no, message, availability, activities } = req.body;
-  const { name, email, message } = req.body;
+  const { name, email, phone_no, message, availability, activities } = req.body;
+  // const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
     return res.status(400).json({ message: "All fields are mandatory" });
   }
 
   try {
-    // const volunteer = new Volunteer({ name, email, phone_no, message, availability, activities });
-    const volunteer = new Volunteer({ name, email, message});
+    const volunteer = new Volunteer({ name, email, phone_no, message, availability, activities });
+    // const volunteer = new Volunteer({ name, email, message});
     const savedVolunteer = await volunteer.save();
 
     res.status(200).json({ message: "Volunteer created successfully", volunteer: savedVolunteer });
